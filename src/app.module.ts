@@ -3,11 +3,11 @@ import { ChatModule } from './chat/api/chat.module';
 import { ConfigModule } from "@nestjs/config";
 import { DatabaseModule } from './chat/infrastructure/database.module';
 import * as Joi from "@hapi/joi";
-import { StockModule } from "./chat/api/stock.module";
+
 
 @Module({
   imports: [
-    ChatModule, StockModule,
+    ChatModule,
   ConfigModule.forRoot({
     validationSchema: Joi.object({
       POSTGRES_HOST: Joi.string().required(),

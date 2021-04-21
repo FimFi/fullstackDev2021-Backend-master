@@ -10,6 +10,7 @@ import { Socket } from 'socket.io';
 import { WelcomeDto } from '../dtos/welcome.dto';
 import { IChatService, IChatServiceProvider } from "../../core/primary-ports/chat.service.interface";
 import { Inject } from '@nestjs/common';
+import { SendMessageDto } from "../dtos/send-message.dto";
 
 @WebSocketGateway()
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -18,13 +19,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     ) {}
 
   @WebSocketServer() server;
-
   @SubscribeMessage('message')
   async handleChatEvent(
-    @MessageBody() message: string,
+    @MessageBody() message: SendMessageDto,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
-    const chatMessage = await this.chatService.newMessage(message, client.id);
+    const chatMessage = await this.chatService.newMessage(message.message, message.chatClientId);
     this.server.emit('newMessage', chatMessage);
   }
 
